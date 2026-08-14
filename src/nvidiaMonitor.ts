@@ -72,14 +72,15 @@ export class NvidiaMonitorService {
         const last = this.lastPowerReadings.get(gpu.index);
         if (last) {
           const dt = (now - last.time) / 3600000; // 小时
-          const whIncrement = (last.power / 1000) * dt;
+          const whIncrement = last.power * dt; // 瓦时 = 瓦 × 小时
           
           const prev = this.energyData.get(gpu.index) || { totalWh: 0, costCNY: 0 };
           const pricePerKwh = vscode.workspace.getConfiguration('nvidiaMonitor').get<number>('pricePerKwh', 0.55);
           
+          const newTotalWh = prev.totalWh + whIncrement;
           this.energyData.set(gpu.index, {
-            totalWh: prev.totalWh + whIncrement,
-            costCNY: (prev.totalWh / 1000) * pricePerKwh,
+            totalWh: newTotalWh,
+            costCNY: (newTotalWh / 1000) * pricePerKwh, // kWh × 单价 = 元
           });
         }
         this.lastPowerReadings.set(gpu.index, { power: gpu.powerUsage, time: now });
