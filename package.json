@@ -1,0 +1,106 @@
+{
+  "name": "vscode-nvidia-monitor",
+  "displayName": "NVIDIA GPU Monitor",
+  "description": "实时显示 NVIDIA 显卡功耗、温度、显存占用情况",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "nvidiaMonitor.refresh",
+        "title": "刷新 GPU 状态",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "nvidiaMonitor.togglePanel",
+        "title": "切换 GPU 监控面板"
+      },
+      {
+        "command": "nvidiaMonitor.openSettings",
+        "title": "打开 NVIDIA Monitor 设置"
+      }
+    ],
+    "configuration": {
+      "title": "NVIDIA GPU Monitor",
+      "properties": {
+        "nvidiaMonitor.refreshInterval": {
+          "type": "number",
+          "default": 3000,
+          "minimum": 1000,
+          "maximum": 60000,
+          "description": "刷新间隔（毫秒）"
+        },
+        "nvidiaMonitor.nvsmiPath": {
+          "type": "string",
+          "default": "",
+          "description": "nvidia-smi 可执行文件路径（留空使用默认路径）"
+        },
+        "nvidiaMonitor.showInStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "在状态栏显示 GPU 监控信息"
+        },
+        "nvidiaMonitor.statusBarFormat": {
+          "type": "string",
+          "default": "{gpu}: {temp}°C | {memGB} | {power}W",
+          "description": "状态栏显示格式。可用变量: {gpu}, {temp}, {memGB}, {power}"
+        },
+        "nvidiaMonitor.pricePerKwh": {
+          "type": "number",
+          "default": 0.55,
+          "minimum": 0,
+          "description": "每度电价格（元），用于预估电费"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "nvidia-monitor",
+          "title": "NVIDIA GPU Monitor",
+          "icon": "$(device-desktop)"
+        }
+      ]
+    },
+    "views": {
+      "nvidia-monitor": [
+        {
+          "type": "webview",
+          "id": "nvidiaMonitor.panel",
+          "name": "GPU 监控面板"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "npm run compile && vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.74.0",
+    "@vscode/vsce": "^2.19.0",
+    "cheerio": "^1.0.0-rc.12",
+    "typescript": "^4.9.0",
+    "undici": "^5.28.4"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/vscode-nvidia-monitor/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/vscode-nvidia-monitor"
+  }
+}
