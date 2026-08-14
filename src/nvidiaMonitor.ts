@@ -74,10 +74,9 @@ export class NvidiaMonitorService {
           const dt = (now - last.time) / 3600000; // 小时
           const whIncrement = last.power * dt; // 瓦时 = 瓦 × 小时
           
-          const prev = this.energyData.get(gpu.index) || { totalWh: 0, costCNY: 0 };
           const pricePerKwh = vscode.workspace.getConfiguration('nvidiaMonitor').get<number>('pricePerKwh', 0.55);
-          
-          const newTotalWh = prev.totalWh + whIncrement;
+          const prev = this.energyData.get(gpu.index) || { totalWh: 0, costCNY: 0 };
+          const newTotalWh = prev.totalWh + whIncrement; // 累计 Wh（高精度）
           this.energyData.set(gpu.index, {
             totalWh: newTotalWh,
             costCNY: (newTotalWh / 1000) * pricePerKwh, // kWh × 单价 = 元
@@ -206,7 +205,7 @@ export class NvidiaMonitorService {
       tooltip += `- **GPU 利用率**: ${gpu.gpuUtilization.toFixed(1)}%\n`;
       if (energy) {
         const pricePerKwh = vscode.workspace.getConfiguration('nvidiaMonitor').get<number>('pricePerKwh', 0.55);
-        tooltip += `- **累计耗电**: ${energy.totalWh.toFixed(2)}Wh\n`;
+        tooltip += `- **累计耗电**: ${(energy.totalWh / 1000).toFixed(2)}kWh\n`;
         tooltip += `- **预估电费**: ¥${energy.costCNY.toFixed(2)}\n`;
       }
       tooltip += `\n`;

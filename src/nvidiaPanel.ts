@@ -146,7 +146,7 @@ h+='<div class="metric"><span class="metric-label">功耗</span><span class="met
 h+='<div class="metric"><span class="metric-label">显存</span><span class="metric-value">'+fmtGB(g.memoryUsed)+'/'+fmtGB(g.memoryTotal)+'</span><div class="progress-bar"><div class="progress-fill '+mc+'" style="width:'+g.memoryPercent+'%"></div></div></div>';
 h+='<div class="metric"><span class="metric-label">GPU</span><span class="metric-value">'+g.gpuUtilization.toFixed(1)+'%</span><div class="progress-bar"><div class="progress-fill green" style="width:'+g.gpuUtilization+'%"></div></div></div>';
 if(energy){
-h+='<div class="energy-section"><div class="energy-row"><span class="energy-label">⚡ 累计耗电</span><span class="energy-value">'+energy.totalWh.toFixed(5)+'Wh</span></div>';
+h+='<div class="energy-section"><div class="energy-row"><span class="energy-label">⚡ 累计耗电</span><span class="energy-value">'+(energy.totalWh/1000).toFixed(3)+'kWh</span></div>';
 h+='<div class="energy-row" style="margin-top:3px"><span class="energy-label">💰 预估电费</span><span class="energy-value">¥'+energy.costCNY.toFixed(2)+'</span></div></div>'}
 h+='</div></div>'}
 c.innerHTML=h}
